@@ -1,15 +1,16 @@
-package digital.ivan.vecoluc.index
-import org.apache.lucene.document.{Document, KnnFloatVectorField, StoredField}
+package digital.ivan.vecoluc.writer
+
 import org.apache.lucene.index.{IndexWriter, IndexWriterConfig}
 import org.apache.lucene.store.MMapDirectory
-
 import java.nio.file.Paths
+import org.apache.lucene.document.{Document, KnnFloatVectorField, StoredField}
 
-class LuceneWriterService(indexPath: String) {
+class LuceneWriterService(indexWriter: IndexWriter) {
 
-  private val directory = new MMapDirectory(Paths.get(indexPath))
-  private val config = new IndexWriterConfig()
-  private val writer = new IndexWriter(directory, config)
+  def this(indexPath: String) = {
+    this(new IndexWriter(new MMapDirectory(Paths.get(indexPath)), new IndexWriterConfig()))
+    indexWriter.commit()
+  }
 
   def addDocument(metadata: Map[String, String], embeddings: Array[Float]): Unit = {
     val doc = new Document()
@@ -20,7 +21,7 @@ class LuceneWriterService(indexPath: String) {
 
     doc.add(new KnnFloatVectorField("embeddings", embeddings))
 
-    writer.addDocument(doc)
+    indexWriter.addDocument(doc)
   }
 
   def addDocuments(documents: Seq[(Map[String, String], Array[Float])]): Unit = {
@@ -29,7 +30,11 @@ class LuceneWriterService(indexPath: String) {
     }
   }
 
+  def commit(): Unit = {
+    indexWriter.commit()
+  }
+
   def close(): Unit = {
-    writer.close()
+    indexWriter.close()
   }
 }

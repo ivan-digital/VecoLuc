@@ -13,5 +13,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % "0.14.9",
   "io.circe" %% "circe-parser" % "0.14.9",
   "ch.qos.logback" % "logback-classic" % "1.5.6",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5"
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  "org.scalatest" %% "scalatest" % "3.2.19" % Test,
+  "org.scalatestplus" %% "mockito-5-8" % "3.2.17.0" % Test
 )

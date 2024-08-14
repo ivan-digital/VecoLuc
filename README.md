@@ -92,12 +92,16 @@ curl -X POST http://localhost:9000/index/docs -H "Content-Type: application/json
 ```
 
 #### Searching for Documents
-To search for documents using a vector query, send a GET request to /search with the query and topN parameters.
+To search for documents using a vector query, send a POST request to /search with the vector query and the number of top results (topN) in the request body.
 
 #### Request:
 
 ```bash
-curl "http://localhost:9000/search?query=0.1,0.2,0.3,0.4&topN=5"
+curl -X POST http://localhost:9000/search -H "Content-Type: application/json" -d '{
+  "query": [0.1, 0.2, 0.3, 0.4],
+  "topN": 5
+}'
+
 ```
 #### Response:
 
