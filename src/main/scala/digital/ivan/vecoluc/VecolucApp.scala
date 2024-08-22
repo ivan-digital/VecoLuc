@@ -18,6 +18,7 @@ object VecolucApp extends App with LazyLogging {
   private val indexName = "index"
 
   implicit val system: ActorSystem = ActorSystem(name = "vecoluc")
+
   import system.dispatcher
 
   private val luceneWriteService = new LuceneWriterService(indexName)
@@ -25,14 +26,12 @@ object VecolucApp extends App with LazyLogging {
   private val searchService = new IndexSearchService(luceneIndexSearcher)
   private val indexRoutes = new IndexRoutes(luceneWriteService)
   private val searchRoutes = new SearchRoutes(searchService)
+  private val binding = Http().newServerAt(host, port).bind(route)
 
   private def route = concat(
     indexRoutes.routes,
     searchRoutes.routes
   )
-
-  // Server binding and startup
-  private val binding = Http().newServerAt(host, port).bind(route)
   binding.onComplete {
     case Success(_) =>
       logger.info("VecoLuc: Listening for incoming connections!")

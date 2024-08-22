@@ -6,8 +6,8 @@ import org.apache.lucene.store.FSDirectory
 
 import java.lang.Runtime.getRuntime
 import java.nio.file.Paths
-import java.util.concurrent.Executors.newFixedThreadPool
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors.newFixedThreadPool
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 class LuceneSearcher(indexSearcher: IndexSearcher) {

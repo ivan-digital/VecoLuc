@@ -9,9 +9,10 @@ class IndexSearchService(searchService: LuceneSearcher) {
     val query = new KnnFloatVectorQuery("embeddings", vector, topN)
     val scoreDocs = searchService.search(query, topN)
 
-    scoreDocs.map { scoreDoc =>
-      documentToItemDoc(searchService.getDocument(scoreDoc.doc), scoreDoc.score)
-    }.toSeq
+    scoreDocs
+      .map { scoreDoc =>
+        documentToItemDoc(searchService.getDocument(scoreDoc.doc), scoreDoc.score)
+      }.toSeq
   }
 
   private def documentToItemDoc(fields: Map[String, String], score: Float): ItemDoc = {

@@ -4,9 +4,9 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import com.typesafe.scalalogging.LazyLogging
+import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import digital.ivan.vecoluc.model.{Document, Response}
 import digital.ivan.vecoluc.writer.LuceneWriterService
-import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.generic.auto._
 
 import scala.concurrent.duration._

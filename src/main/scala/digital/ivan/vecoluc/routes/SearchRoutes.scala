@@ -4,14 +4,14 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import com.typesafe.scalalogging.LazyLogging
+import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import digital.ivan.vecoluc.model.{ItemDoc, Response, SearchRequest, SearchResults}
 import digital.ivan.vecoluc.reader.IndexSearchService
-import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.generic.auto._
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
 import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future, blocking}
+import scala.util.{Failure, Success}
 
 class SearchRoutes(searchService: IndexSearchService)(implicit ec: ExecutionContext) extends LazyLogging {
 
@@ -23,7 +23,9 @@ class SearchRoutes(searchService: IndexSearchService)(implicit ec: ExecutionCont
           try {
             entity(as[SearchRequest]) { searchRequest =>
               val searchFuture: Future[Seq[ItemDoc]] = Future {
-                searchService.searchByVector(searchRequest.query, searchRequest.topN)
+                blocking {
+                  searchService.searchByVector(searchRequest.query, searchRequest.topN)
+                }
               }
 
               onComplete(searchFuture) {
